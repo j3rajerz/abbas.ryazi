@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اپلیکیشن ریاضی</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .login {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .login input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login button:hover {
+            background-color: #0056b3;
+        }
+        .app {
+            display: none;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .menu {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+        .dropdown-content button {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: right;
+            border: none;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+        .dropdown-content button:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .section {
+            display: none;
+            margin-top: 20px;
+        }
+        .section h2 {
+            color: #007bff;
+        }
+        .number-input {
+            direction: ltr;
+            text-align: center;
+            font-size: 20px;
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .keyboard button {
+            padding: 15px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .keyboard button:hover {
+            background-color: #218838;
+        }
+        .sudoku-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .sudoku-cell {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f0f8ff;
+            direction: ltr;
+        }
+        .timer {
+            font-size: 24px;
+            color: #dc3545;
+            margin-top: 20px;
+        }
+        .math-options button {
+            padding: 15px;
+            font-size: 18px;
+            background-color: #ffcccb;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .math-options button:hover {
+            background-color: #ffb6c1;
+        }
+    </style>
+</head>
+<body>
+    <!-- صفحه ورود -->
+    <div id="login" class="login">
+        <h1>ورود به سیستم</h1>
+        <input type="text" id="username" placeholder="نام کاربری">
+        <input type="password" id="password" placeholder="رمز عبور">
+        <button onclick="login()">ورود</button>
+        <p id="loginError" class="error"></p>
+    </div>
+
+    <!-- برنامه اصلی -->
+    <div id="app" class="app">
+        <div class="menu">
+            <div class="dropdown">
+                <button class="dropbtn">منو 🍔</button>
+                <div class="dropdown-content">
+                    <button onclick="showNumberLearning()">آموزش اعداد 🔢</button>
+                    <button onclick="showAddition()">جمع 🍏➕🍎</button>
+                    <button onclick="showSubtraction()">تفریق 🍊➖🍌</button>
+                    <button onclick="showMathGame()">بازی ریاضی 🎮</button>
+                    <button onclick="showSudoku()">سودوکو 🔢🎲</button>
+                    <button onclick="logout()">خروج 🚪</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- آموزش اعداد -->
+        <div id="numberLearning" class="section">
+            <h2>آموزش اعداد 🔢</h2>
+            <p>اعداد از ۱ تا ۱۰ را وارد کنید:</p>
+            <div id="numberInputs"></div>
+            <div class="keyboard" id="numberKeyboard"></div>
+        </div>
+
+        <!-- جمع -->
+        <div id="addition" class="section">
+            <h2>جمع 🍏➕🍎</h2>
+            <div id="additionQuestion"></div>
+            <div class="math-options" id="additionOptions"></div>
+            <p id="additionResult"></p>
+            <button onclick="generateAdditionQuestion()">سوال بعدی</button>
+        </div>
+
+        <!-- تفریق -->
+        <div id="subtraction" class="section">
+            <h2>تفریق 🍊➖🍌</h2>
+            <div id="subtractionQuestion"></div>
+            <div class="math-options" id="subtractionOptions"></div>
+            <p id="subtractionResult"></p>
+            <button onclick="generateSubtractionQuestion()">سوال بعدی</button>
+        </div>
+
+        <!-- بازی ریاضی -->
+        <div id="mathGame" class="section">
+            <h2>بازی ریاضی 🎮</h2>
+            <div id="mathGameQuestion"></div>
+            <input type="number" id="mathGameInput" class="number-input" placeholder="عدد را وارد کنید">
+            <button onclick="checkMathGameAnswer()">بررسی</button>
+            <div class="timer" id="mathGameTimer">زمان: 60 ثانیه</div>
+            <div class="scoreboard" id="mathGameScore">امتیاز: 0</div>
+            <button onclick="startMathGame()">شروع بازی</button>
+        </div>
+
+        <!-- سودوکو -->
+        <div id="sudoku" class="section">
+            <h2>سودوکو 🔢🎲</h2>
+            <div class="sudoku-grid" id="sudokuGrid"></div>
+            <div class="timer" id="sudokuTimer">زمان: 0 ثانیه</div>
+            <button onclick="checkSudoku()">بررسی</button>
+            <button onclick="generateSudoku()">شروع سودوکو</button>
+        </div>
+    </div>
+
+    <script>
+        // توابع ورود و خروج
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === "abbas" && password === "1335") {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                showNumberLearning();
+            } else {
+                document.getElementById('loginError').innerText = "نام کاربری یا رمز عبور اشتباه است.";
+            }
+        }
+
+        function logout() {
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('login').style.display = 'block';
+            document.getElementById('loginError').innerText = "";
+        }
+
+        // توابع نمایش بخش‌ها
+        function showNumberLearning() {
+            hideAllSections();
+            document.getElementById('numberLearning').style.display = 'block';
+            generateNumberInputs();
+            generateNumberKeyboard();
+        }
+
+        function showAddition() {
+            hideAllSections();
+            document.getElementById('addition').style.display = 'block';
+            generateAdditionQuestion();
+        }
+
+        function showSubtraction() {
+            hideAllSections();
+            document.getElementById('subtraction').style.display = 'block';
+            generateSubtractionQuestion();
+        }
+
+        function showMathGame() {
+            hideAllSections();
+            document.getElementById('mathGame').style.display = 'block';
+            startMathGame();
+        }
+
+        function showSudoku() {
+            hideAllSections();
+            document.getElementById('sudoku').style.display = 'block';
+            generateSudoku();
+        }
+
+        function hideAllSections() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.style.display = 'none');
+        }
+
+        // آموزش اعداد
+        function generateNumberInputs() {
+            const numberInputs = document.getElementById('numberInputs');
+            numberInputs.innerHTML = "";
+            for (let i = 1; i <= 10; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'number-input';
+                input.disabled = true;
+                numberInputs.appendChild(input);
+            }
+        }
+
+        function generateNumberKeyboard() {
+            const keyboard = document.getElementById('numberKeyboard');
+            keyboard.innerHTML = "";
+            for (let i = 1; i <= 9; i++) {
+                const button = document.createElement('button');
+                button.innerText = toPersianNumber(i);
+                button.onclick = () => fillNumberInput(toPersianNumber(i));
+                keyboard.appendChild(button);
+            }
+            const zeroButton = document.createElement('button');
+            zeroButton.innerText = toPersianNumber(0);
+            zeroButton.onclick = () => fillNumberInput(toPersianNumber(0));
+            keyboard.appendChild(zeroButton);
+        }
+
+        function fillNumberInput(number) {
+            const inputs = document.querySelectorAll('#numberInputs input');
+            for (let input of inputs) {
+                if (!input.value) {
+                    input.value = number;
+                    break;
+                }
+            }
+        }
+
+        // جمع
+        function generateAdditionQuestion() {
+            const num1 = Math.floor(Math.random() * 20);
+            const num2 = Math.floor(Math.random() * 20);
+            const correctAnswer = num1 + num2;
+            const options = [correctAnswer, correctAnswer + 1, correctAnswer - 1].sort(() => Math.random() - 0.5);
+
+            document.getElementById('additionQuestion').innerText = `${toPersianNumber(num1)} + ${toPersianNumber(num2)} = ?`;
+            const additionOptions = document.getElementById('additionOptions');
+            additionOptions.innerHTML = "";
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = toPersianNumber(option);
+                button.onclick = () => checkAdditionAnswer(option, correctAnswer);
+                additionOptions.appendChild(button);
+            });
+        }
+
+        function checkAdditionAnswer(selectedAnswer, correctAnswer) {
+            if (selectedAnswer === correctAnswer) {
+                document.getElementById('additionResult').innerText = "آفرین! پاسخ درست است.";
+            } else {
+                document.getElementById('additionResult').innerText = `متاسفانه پاسخ اشتباه است. پاسخ صحیح: ${toPersianNumber(correctAnswer)}`;
+            }
+        }
+
+        // تفریق
+        function generateSubtractionQuestion() {
+            const num1 = Math.floor(Math.random() * 20);
+            const num2 = Math.floor(Math.random() * num1);
+            const correctAnswer = num1 - num2;
+            const options = [correctAnswer, correctAnswer + 1, correctAnswer - 1].sort(() => Math.random() - 0.5);
+
+            document.getElementById('subtractionQuestion').innerText = `${toPersianNumber(num1)} - ${toPersianNumber(num2)} = ?`;
+            const subtractionOptions = document.getElementById('subtractionOptions');
+            subtractionOptions.innerHTML = "";
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = toPersianNumber(option);
+                button.onclick = () => checkSubtractionAnswer(option, correctAnswer);
+                subtractionOptions.appendChild(button);
+            });
+        }
+
+        function checkSubtractionAnswer(selectedAnswer, correctAnswer) {
+            if (selectedAnswer === correctAnswer) {
+                document.getElementById('subtractionResult').innerText = "آفرین! پاسخ درست است.";
+            } else {
+                document.getElementById('subtractionResult').innerText = `متاسفانه پاسخ اشتباه است. پاسخ صحیح: ${toPersianNumber(correctAnswer)}`;
+            }
+        }
+
+        // بازی ریاضی
+        let mathGameNumber;
+        let mathGameScore = 0;
+
+        function startMathGame() {
+            const num1 = 10;
+            const num2 = 12;
+            mathGameNumber = Math.floor(Math.random() * (num2 - num1 + 1)) + num1;
+            mathGameScore = 0;
+            document.getElementById('mathGameScore').innerText = `امتیاز: ${mathGameScore}`;
+            document.getElementById('mathGameQuestion').innerText = `عدد بین ${toPersianNumber(num1)} و ${toPersianNumber(num2)} را حدس بزنید.`;
+            document.getElementById('mathGameInput').value = "";
+            startTimer(60, 'mathGameTimer');
+        }
+
+        function checkMathGameAnswer() {
+            const guess = parseInt(document.getElementById('mathGameInput').value);
+            if (isNaN(guess)) {
+                alert("لطفاً یک عدد وارد کنید.");
+                return;
+            }
+            if (guess === mathGameNumber) {
+                mathGameScore += 10;
+                alert(`آفرین! عدد درست بود. امتیاز شما: ${mathGameScore}`);
+                startMathGame();
+            } else if (guess < mathGameNumber) {
+                alert("عدد بزرگ‌تر است.");
+            } else {
+                alert("عدد کوچک‌تر است.");
+            }
+            document.getElementById('mathGameScore').innerText = `امتیاز: ${mathGameScore}`;
+        }
+
+        // سودوکو
+        function generateSudoku() {
+            const sudokuGrid = document.getElementById('sudokuGrid');
+            sudokuGrid.innerHTML = "";
+            const numbers = [1, 2, 3, 4];
+            const grid = [];
+            for (let i = 0; i < 4; i++) {
+                const row = [];
+                for (let j = 0; j < 4; j++) {
+                    row.push(numbers[(i + j) % 4]);
+                }
+                grid.push(row);
+            }
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    const cell = document.createElement('input');
+                    cell.className = 'sudoku-cell';
+                    cell.type = 'number';
+                    cell.min = '1';
+                    cell.max = '4';
+                    if (Math.random() > 0.5) {
+                        cell.value = toPersianNumber(grid[i][j]);
+                        cell.disabled = true;
+                    }
+                    sudokuGrid.appendChild(cell);
+                }
+            }
+            startTimer(300, 'sudokuTimer');
+        }
+
+        function checkSudoku() {
+            const cells = document.querySelectorAll('.sudoku-cell');
+            let isCorrect = true;
+            cells.forEach(cell => {
+                if (cell.value === "") {
+                    isCorrect = false;
+                }
+            });
+            if (isCorrect) {
+                alert("آفرین! جدول سودوکو کامل شد.");
+            } else {
+                alert("لطفاً همه خانه‌ها را پر کنید.");
+            }
+        }
+
+        // تایمر
+        function startTimer(seconds, timerId) {
+            let timeLeft = seconds;
+            const timer = document.getElementById(timerId);
+            const interval = setInterval(() => {
+                timeLeft--;
+                timer.innerText = `زمان: ${toPersianNumber(timeLeft)} ثانیه`;
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    alert("زمان شما به پایان رسید!");
+                }
+            }, 1000);
+        }
+
+        // تبدیل اعداد به فارسی
+        function toPersianNumber(number) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return number.toString().replace(/\d/g, (d) => persianDigits[d]);
+        }
+    </script>
+</body>
+</html>
